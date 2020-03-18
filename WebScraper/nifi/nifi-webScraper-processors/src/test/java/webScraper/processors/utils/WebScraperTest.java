@@ -16,10 +16,15 @@
  */
 package webScraper.processors.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.net.URL;
 
 
 public class WebScraperTest {
@@ -32,8 +37,14 @@ public class WebScraperTest {
     }
 
     @Test
-    public void testProcessor() {
+    public void testProcessor() throws Exception {
+        String access_url = "https://openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22";
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(new URL(access_url));
+        JSONObject jsonObject = new JSONObject(node.toString());
 
+        System.out.println(node.toString());
+        System.out.println(jsonObject.toString());
     }
 
 }

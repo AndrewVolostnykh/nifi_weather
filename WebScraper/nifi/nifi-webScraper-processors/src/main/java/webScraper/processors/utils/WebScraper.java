@@ -16,6 +16,8 @@
  */
 package webScraper.processors.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.behavior.ReadsAttribute;
@@ -32,10 +34,12 @@ import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
+import org.apache.nifi.processor.io.OutputStreamCallback;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.crypto.interfaces.PBEKey;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -120,10 +124,11 @@ public class WebScraper extends AbstractProcessor {
             if (access_url != null) {
                 getLogger().info("S: URL not null");
 
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode node = mapper.readTree(new URL(access_url));
 
-                String resultData = readJsonFromUrl(access_url);
-                getLogger().info("Crutch: Got json from web-site " + (resultData.isEmpty() ? " nothing here " : resultData.substring(0, 10))); // crutch that will shows me how it works
-                flowFile = session.putAttribute(flowFile, "webscraper.data", resultData); // finally, when next processor will take this String, they must wrap it in JSONObject
+                getLogger().info("S: attempt to send bytes");
+                flowFile = session.write(flowFile, (out) -> out.write(node.toString().getBytes()));
 
                 session.transfer(flowFile, SUCCESS_RELATIONSHIP);
                 getLogger().info("S: Transfer done");
@@ -143,25 +148,5 @@ public class WebScraper extends AbstractProcessor {
         }
 
     }
-
-        private String readAll(Reader rd) throws IOException {
-            StringBuilder sb = new StringBuilder();
-            int cp;
-            while ((cp = rd.read()) != -1) {
-                sb.append((char) cp);
-            }
-            return sb.toString();
-        }
-
-        public String readJsonFromUrl(String url) throws IOException, JSONException {
-            InputStream is = new URL(url).openStream();
-            try {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                String jsonText = readAll(rd);
-                return jsonText;
-            } finally {
-                is.close();
-            }
-        }
 
 }
