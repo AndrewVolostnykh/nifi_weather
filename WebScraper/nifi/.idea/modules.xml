@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/nifi.iml" filepath="$PROJECT_DIR$/nifi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nifi-webScraper-nar/nifi-webScraper-nar.iml" filepath="$PROJECT_DIR$/nifi-webScraper-nar/nifi-webScraper-nar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nifi-webScraper-processors/nifi-webScraper-processors.iml" filepath="$PROJECT_DIR$/nifi-webScraper-processors/nifi-webScraper-processors.iml" />
+    </modules>
+  </component>
+</project>

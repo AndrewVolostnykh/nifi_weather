@@ -1,0 +1,3 @@
+jsonHandler\utilities\DbAccessTest.class
+jsonHandler\utilities\JsonParserTest.class
+jsonHandler\processors\utils\JSONHandlerTest.class
